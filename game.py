@@ -29,6 +29,17 @@ class Game:
         self.player1 = player1.draw(6)
         self.player2 = player2.draw(5)
 
+    def end_turn(self):
+        self.phase = Phase.Draw
+        self.active_player = 2
+        self.draw_phase()
+
+    def draw_phase(self):
+        if self.active_player == 1:
+            self.player1 = self.player1.draw()
+        else:
+            self.player2 = self.player2.draw()
+
     turn = 0
     player1: Player
     player2: Player

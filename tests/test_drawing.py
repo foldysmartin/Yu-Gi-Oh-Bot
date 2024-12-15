@@ -14,4 +14,11 @@ def test_cards_are_removed_from_deck():
 
     assert game.player1.deck_size() == 0
     assert game.player2.deck_size() == 1
+
+def test_end_turn_triggers_next_draw():
+    player = Player(deck = [1,1,1,1,1,1])
+    game = Game(player, player)
+    game.end_turn()
+    
+    assert game.player2.numberOfCards() == 6
     
