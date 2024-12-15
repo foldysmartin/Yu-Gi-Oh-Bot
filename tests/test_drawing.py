@@ -1,6 +1,6 @@
 from pytest import raises
 from cards import find_card
-from game import Field, Game, Lost, Player
+from game import Field, OutOfCards
 
 
 def test_draw_on_start():
@@ -31,7 +31,7 @@ def test_game_is_lost_if_cannot_draw():
     monster = find_card("Mystical Elf")
     deck = [monster,monster,monster,monster,monster,monster]
     field = Field.game_start(deck, deck)
-    with raises(Lost):
+    with raises(OutOfCards):
         field = field.end_turn()
         field = field.end_turn()
 

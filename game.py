@@ -4,7 +4,10 @@ from typing import List
 
 from monster_card import MonsterCard
 
-class Lost(Exception):
+class OutOfCards(Exception):
+    pass
+
+class SummoningError(Exception):
     pass
 
 class Zone(Enum):
@@ -23,11 +26,14 @@ class FieldHalf:
 
     def draw(self, count=1):
         if count > self.deck_size():
-            raise Lost()
+            raise OutOfCards()
 
         return replace(self, _hand=self._hand+self._deck[0:count], _deck = self._deck[count:])
     
     def activate(self, card_number, zone:Zone):
+        if self._monsters[zone.value] != None:
+            raise SummoningError("Cannot summon where there is already a monster")
+
         card = self._hand[card_number - 1]
         monsters = self._monsters[:]
         monsters[zone.value] = card

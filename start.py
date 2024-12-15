@@ -1,5 +1,5 @@
 from cards import find_card
-from game import Game, Player, Zone
+from game import Game, Zone
 
 
 monster = find_card("Mystical Elf")
