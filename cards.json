@@ -1,0 +1,9 @@
+[{
+    "name": "Mystical Elf",
+    "card_type": "Monster",
+    "attribute": "Light",
+    "type": "Spellcaster",
+    "level": 4,
+    "attack": 800,
+    "defence": 2000
+}]
