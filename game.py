@@ -2,6 +2,9 @@ from dataclasses import dataclass, field, replace
 from enum import Enum
 from typing import List
 
+class Lost(Exception):
+    pass
+
 @dataclass(
            )
 class Player:
@@ -10,6 +13,9 @@ class Player:
 
 
     def draw(self, count=1):
+        if count > self.deck_size():
+            raise Lost()
+
         return replace(self, _hand=self._hand+self.deck[0:count], deck = self.deck[count:])
 
     def numberOfCards(self):

@@ -6,10 +6,11 @@ game = Game(player, player)
 
 print(game)
 
-action = input("e for endturn")
-print(action)
+while True:
 
-if action == "e":
-    game.end_turn()
+    action = input("e for endturn\n")
 
-print(game)
+    if action == "e":
+        game.end_turn()
+
+    print(game)

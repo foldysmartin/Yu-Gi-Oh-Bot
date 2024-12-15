@@ -1,4 +1,5 @@
-from game import Game, Player
+from pytest import raises
+from game import Game, Lost, Player
 
 
 def test_draw_on_start():
@@ -21,4 +22,12 @@ def test_end_turn_triggers_next_draw():
     game.end_turn()
     
     assert game.player2.numberOfCards() == 6
+    
+def test_game_is_lost_if_cannot_draw():
+    player = Player(deck = [1,1,1,1,1,1])
+    game = Game(player, player)
+    with raises(Lost):
+        game.end_turn()
+        game.end_turn()
+
     
