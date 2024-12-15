@@ -3,8 +3,8 @@ from game import Game, Player, Zone
 
 
 monster = find_card("Mystical Elf")
-player = Player(deck = [monster,monster,monster,monster,monster,monster])
-game = Game(player, player)
+deck = [monster,monster,monster,monster,monster,monster]
+game = Game(deck, deck)
 
 print(game)
 

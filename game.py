@@ -14,21 +14,18 @@ class Zone(Enum):
     Fourth = 3
     Fith = 4
 
-
-@dataclass(
-           )
-class Player:
-    deck: List[MonsterCard]
+    
+@dataclass(frozen=True)
+class FieldHalf:
+    _deck: List[MonsterCard]
     _hand: List[MonsterCard] = field(default_factory=list)
     _monsters: List[MonsterCard] = field(default_factory=lambda: [None, None, None, None, None])
-
-
 
     def draw(self, count=1):
         if count > self.deck_size():
             raise Lost()
 
-        return replace(self, _hand=self._hand+self.deck[0:count], deck = self.deck[count:])
+        return replace(self, _hand=self._hand+self._deck[0:count], _deck = self._deck[count:])
     
     def activate(self, card_number, zone:Zone):
         card = self._hand[card_number - 1]
@@ -44,45 +41,65 @@ class Player:
         return len(self._hand)
     
     def deck_size(self):
-        return len(self.deck)
+        return len(self._deck)
+
+    
+@dataclass(frozen=True)
+class Field:
+    active_player: FieldHalf
+    inactive_player: FieldHalf
+
+    def game_start(deck_1, deck_2):
+        _active_player = FieldHalf(deck_1)
+        _inactive_player = FieldHalf(deck_2)
+
+        _active_player = _active_player.draw(6)
+        _inactive_player = _inactive_player.draw(5)
+
+        return Field(_active_player, _inactive_player)
+
+    def end_turn(self):
+        field = self._flip_active_player()
+        return field.draw()
+    
+    def _flip_active_player(self):
+        return replace(
+            self,
+            active_player = self.inactive_player,
+            inactive_player = self.active_player,
+        )
+
+    def draw(self, count=1):
+        return replace(self, active_player = self.active_player.draw(count))
+    
+    def activate(self, card_number, zone:Zone):
+        return replace(self, active_player = self.active_player.activate(card_number, zone))
+
     
 class Phase(Enum):
     Draw = 0
 
 @dataclass()
 class Game:
-    def __init__(self, player1, player2):
+    def __init__(self, deck_1, deck_2):
 
         self.phase = Phase.Draw
-        self.player1 = player1.draw(6)
-        self.player2 = player2.draw(5)
+        self.field = Field.game_start(deck_1, deck_2)
 
     def end_turn(self):
         self.phase = Phase.Draw
-        self.active_player = 2
-        self.draw_phase()
+        self.field = self.field.end_turn()
 
-    def draw_phase(self):
-        if self.active_player == 1:
-            self.player1 = self.player1.draw()
-        else:
-            self.player2 = self.player2.draw()
 
     def activate(self, card, zone):
-        if self.active_player == 1:
-            self.player1 = self.player1.activate(card, zone)
-        else:
-            self.player2 = self.player2.activate(card, zone)
+        self.field = self.field.activate(card, zone)
 
     turn = 0
-    player1: Player
-    player2: Player
-
-    active_player = 1
+    field: Field
     phase: Phase
 
     def __str__(self):
-        return f"""P1 Deck: {self.player1.deck_size()} Cards: {self.player1._hand}
-Monsters {self.player1._monsters}
-Monsters {self.player1._monsters}
-P2 Deck: {self.player2.deck_size()} Cards: {self.player2._hand}"""
+        return f"""Active Deck: {self.field.active_player.deck_size()} Cards: {self.field.active_player._hand}
+Monsters {self.field.active_player._monsters}
+Monsters {self.field.inactive_player._monsters}
+Inactive Deck: {self.field.inactive_player.deck_size()} Cards: {self.field.inactive_player._hand}"""

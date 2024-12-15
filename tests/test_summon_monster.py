@@ -1,15 +1,15 @@
 from cards import find_card
-from game import Player, Zone
+from game import FieldHalf, Player, Zone
 
 
 def test_can_summon_a_monster():
     monster = find_card("Mystical Elf")
 
-    player = Player([monster])
-    player = player.draw()
+    field_half = FieldHalf([monster])
+    field_half = field_half.draw()
 
     
-    player = player.activate(1, Zone.Third)
+    field_half = field_half.activate(1, Zone.Third)
 
-    assert player.monsterAt(Zone.Third) == monster
-    assert player.numberOfCards() == 0
+    assert field_half.monsterAt(Zone.Third) == monster
+    assert field_half.numberOfCards() == 0
