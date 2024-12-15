@@ -10,10 +10,13 @@ class Player:
 
 
     def draw(self, count=1):
-        return replace(self, _hand=self._hand+self.deck[0:count])
+        return replace(self, _hand=self._hand+self.deck[0:count], deck = self.deck[count:])
 
     def numberOfCards(self):
         return len(self._hand)
+    
+    def deck_size(self):
+        return len(self.deck)
     
 class Phase(Enum):
     Draw = 0
@@ -34,5 +37,5 @@ class Game:
     phase: Phase
 
     def __str__(self):
-        return f"""P1 Cards: {self.player1.numberOfCards()}
-P2 Cards: {self.player2.numberOfCards()}"""
+        return f"""P1 Deck: {self.player1.deck_size()} Cards: {self.player1.numberOfCards()}
+P2 Deck: {self.player2.deck_size()} Cards: {self.player2.numberOfCards()}"""
