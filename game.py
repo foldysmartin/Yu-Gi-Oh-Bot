@@ -32,3 +32,7 @@ class Game:
 
     active_player = 1
     phase: Phase
+
+    def __str__(self):
+        return f"""P1 Cards: {self.player1.numberOfCards()}
+P2 Cards: {self.player2.numberOfCards()}"""
