@@ -30,13 +30,15 @@ class FieldHalf:
 
         return replace(self, _hand=self._hand+self._deck[0:count], _deck = self._deck[count:])
     
-    def activate(self, card_number, zone:Zone):
-        if self._monsters[zone.value] != None:
-            raise SummoningError("Cannot summon where there is already a monster")
+    def activate(self, card_number):
+        
+        zone = first_index(self._monsters, lambda monster: monster == None)
+        if zone == None:
+            raise SummoningError("No empty zones to summon to")
 
         card = self._hand[card_number - 1]
         monsters = self._monsters[:]
-        monsters[zone.value] = card
+        monsters[zone] = card
 
         return replace(self, _hand= self._hand[:card_number - 1] + self._hand[card_number:], _monsters = monsters)
     
@@ -49,6 +51,8 @@ class FieldHalf:
     def deck_size(self):
         return len(self._deck)
 
+def first_index(iterable, condition = lambda x: True):
+    return next((i for i, x in enumerate(iterable) if condition(x)), None)
     
 @dataclass(frozen=True)
 class Field:
