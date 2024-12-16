@@ -23,6 +23,7 @@ class FieldHalf:
     _deck: List[MonsterCard]
     _hand: List[MonsterCard] = field(default_factory=list)
     _monsters: List[MonsterCard] = field(default_factory=lambda: [None, None, None, None, None])
+    
 
     def draw(self, count=1):
         if count > self.deck_size():
@@ -54,10 +55,16 @@ class FieldHalf:
 def first_index(iterable, condition = lambda x: True):
     return next((i for i, x in enumerate(iterable) if condition(x)), None)
     
+class Player(Enum):
+    One = 1
+    Two = 2
+
 @dataclass(frozen=True)
 class Field:
     active_player: FieldHalf
     inactive_player: FieldHalf
+
+    current_player: Player = Player.One
 
     def game_start(deck_1, deck_2):
         _active_player = FieldHalf(deck_1)
@@ -77,6 +84,7 @@ class Field:
             self,
             active_player = self.inactive_player,
             inactive_player = self.active_player,
+            current_player = Player.Two if self.current_player == Player.One else Player.One
         )
 
     def draw(self, count=1):
