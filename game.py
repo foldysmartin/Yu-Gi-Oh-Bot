@@ -4,11 +4,14 @@ from typing import List
 
 from monster_card import MonsterCard
 
+
 class OutOfCards(Exception):
     pass
 
+
 class SummoningError(Exception):
     pass
+
 
 class Zone(Enum):
     First = 0
@@ -17,22 +20,25 @@ class Zone(Enum):
     Fourth = 3
     Fith = 4
 
-    
+
 @dataclass(frozen=True)
 class FieldHalf:
     _deck: List[MonsterCard]
     _hand: List[MonsterCard] = field(default_factory=list)
-    _monsters: List[MonsterCard] = field(default_factory=lambda: [None, None, None, None, None])
-    
+    _monsters: List[MonsterCard] = field(
+        default_factory=lambda: [None, None, None, None, None]
+    )
 
     def draw(self, count=1):
         if count > self.deck_size():
             raise OutOfCards()
 
-        return replace(self, _hand=self._hand+self._deck[0:count], _deck = self._deck[count:])
-    
+        return replace(
+            self, _hand=self._hand + self._deck[0:count], _deck=self._deck[count:]
+        )
+
     def activate(self, card_number):
-        
+
         zone = first_index(self._monsters, lambda monster: monster == None)
         if zone == None:
             raise SummoningError("No empty zones to summon to")
@@ -41,23 +47,30 @@ class FieldHalf:
         monsters = self._monsters[:]
         monsters[zone] = card
 
-        return replace(self, _hand= self._hand[:card_number - 1] + self._hand[card_number:], _monsters = monsters)
-    
-    def monsterAt(self, zone:Zone):
+        return replace(
+            self,
+            _hand=self._hand[: card_number - 1] + self._hand[card_number:],
+            _monsters=monsters,
+        )
+
+    def monsterAt(self, zone: Zone):
         return self._monsters[zone.value]
 
     def numberOfCards(self):
         return len(self._hand)
-    
+
     def deck_size(self):
         return len(self._deck)
 
-def first_index(iterable, condition = lambda x: True):
+
+def first_index(iterable, condition=lambda x: True):
     return next((i for i, x in enumerate(iterable) if condition(x)), None)
-    
+
+
 class Player(Enum):
     One = 1
     Two = 2
+
 
 @dataclass(frozen=True)
 class Field:
@@ -78,36 +91,44 @@ class Field:
     def end_turn(self):
         field = self._flip_active_player()
         return field.draw()
-    
+
     def _flip_active_player(self):
         return replace(
             self,
-            active_player = self.inactive_player,
-            inactive_player = self.active_player,
-            current_player = Player.Two if self.current_player == Player.One else Player.One
+            active_player=self.inactive_player,
+            inactive_player=self.active_player,
+            current_player=(
+                Player.Two if self.current_player == Player.One else Player.One
+            ),
         )
 
     def draw(self, count=1):
-        return replace(self, active_player = self.active_player.draw(count))
-    
-    def activate(self, card_number, zone:Zone):
-        return replace(self, active_player = self.active_player.activate(card_number, zone))
+        return replace(self, active_player=self.active_player.draw(count))
 
-    
+    def activate(self, card_number, zone: Zone):
+        return replace(
+            self, active_player=self.active_player.activate(card_number, zone)
+        )
+
+
 class Phase(Enum):
     Draw = 0
 
+
 @dataclass()
 class Game:
-    def __init__(self, deck_1, deck_2):
+    def __init__(self, field):
 
         self.phase = Phase.Draw
-        self.field = Field.game_start(deck_1, deck_2)
+        self.field = field
+
+    def start(deck_1, deck_2):
+        field = Field.game_start(deck_1, deck_2)
+        return Game(field)
 
     def end_turn(self):
         self.phase = Phase.Draw
         self.field = self.field.end_turn()
-
 
     def activate(self, card, zone):
         self.field = self.field.activate(card, zone)

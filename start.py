@@ -1,23 +1,32 @@
+from tkinter import Label, Tk
 from cards import find_card
 from game import Game, Zone
 
 
-monster = find_card("Mystical Elf")
-deck = [monster,monster,monster,monster,monster,monster]
-game = Game(deck, deck)
+def create_deck():
+    return [
+        find_card("Mystical Elf"),
+        find_card("Mystical Elf"),
+        find_card("Mystical Elf"),
+        find_card("Mystical Elf"),
+        find_card("Mystical Elf"),
+        find_card("Mystical Elf"),
+    ]
 
-print(game)
 
-while True:
+game = Game.start(create_deck(), create_deck())
 
-    action = input("e for endturn, a for activate \n")
+root = Tk()
+root.geometry("600x400+50+50")
+root.resizable(0, 0)
 
-    if action == "e":
-        game.end_turn()
-    elif action == "a":
-        card = int(input("Enter card number\n"))
-        zone = int(input("Enter zone number\n")) - 1
 
-        game.activate(card, Zone(zone))
+for i, card in enumerate(game.field.active_player._hand):
+    label = Label(root, text=card.name)
+    label.grid(row=1, column=i)
 
-    print(game)
+for i, card in enumerate(game.field.inactive_player._hand):
+    label = Label(root, text="Hidden")
+    label.grid(row=0, column=i)
+
+root.mainloop()
