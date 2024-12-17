@@ -44,6 +44,8 @@ class FieldHalf:
         )
 
     def activate(self, card_number):
+        if self.numberOfCards() == 0:
+            raise SummoningError("No cards to summon")
 
         zone = first_index(self.monsters, lambda monster: monster == None)
         if zone == None:
