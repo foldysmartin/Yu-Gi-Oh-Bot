@@ -1,6 +1,7 @@
 from pytest import raises
+from Field import Field
 from cards import find_card
-from game import Field, OutOfCards
+from FieldHalf import OutOfCards
 
 
 def test_draw_on_start():

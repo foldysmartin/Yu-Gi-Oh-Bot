@@ -1,5 +1,6 @@
+from Field import Field
 from cards import find_card
-from game import Field, Player, Game
+from game import Player, Game
 
 
 def test_starting_active_player_is_player_1():
