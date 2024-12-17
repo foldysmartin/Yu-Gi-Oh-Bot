@@ -26,7 +26,13 @@ class FieldHalf:
     _deck: List[MonsterCard]
     _hand: List[MonsterCard] = field(default_factory=list)
     _monsters: List[MonsterCard] = field(
-        default_factory=lambda: [None, None, None, None, None]
+        default_factory=lambda: [
+            None,
+            None,
+            None,
+            None,
+            None,
+        ]  # Should maybe be an empty slot type
     )
 
     def draw(self, count=1):
@@ -105,10 +111,8 @@ class Field:
     def draw(self, count=1):
         return replace(self, active_player=self.active_player.draw(count))
 
-    def activate(self, card_number, zone: Zone):
-        return replace(
-            self, active_player=self.active_player.activate(card_number, zone)
-        )
+    def activate(self, card_number):
+        return replace(self, active_player=self.active_player.activate(card_number))
 
 
 class Phase(Enum):
@@ -130,8 +134,8 @@ class Game:
         self.phase = Phase.Draw
         self.field = self.field.end_turn()
 
-    def activate(self, card, zone):
-        self.field = self.field.activate(card, zone)
+    def activate(self, card):
+        self.field = self.field.activate(card)
 
     turn = 0
     field: Field
