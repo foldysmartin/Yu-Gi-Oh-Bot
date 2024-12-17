@@ -37,7 +37,7 @@ class GameWindow(Tk):
     def _draw_player_hand(
         self,
     ):
-        for i, card in enumerate(self.game.field.active_player._hand):
+        for i, card in enumerate(self.game.field.active_player.hand):
             label = Label(self, text=card.name)
             label.grid(row=4, column=i)
 
@@ -51,13 +51,13 @@ class GameWindow(Tk):
     def _draw_opponent_hand(
         self,
     ):
-        for i, card in enumerate(self.game.field.inactive_player._hand):
+        for i, card in enumerate(self.game.field.inactive_player.hand):
             label = Label(self, text="Hidden")
             label.grid(row=0, column=i)
             self.cards.append(label)
 
     def _draw_monster_zone(self):
-        for i, card in enumerate(self.game.field.active_player._monsters):
+        for i, card in enumerate(self.game.field.active_player.monsters):
             card_text = card.name if card else "Empty"
             label = Label(self, text=card_text)
             label.grid(row=3, column=i)
