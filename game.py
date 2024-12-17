@@ -59,14 +59,14 @@ class FieldHalf:
             monsters=monsters,
         )
 
+    def deck_size(self):
+        return len(self.deck)
+
     def monsterAt(self, zone: Zone):
         return self.monsters[zone.value]
 
     def numberOfCards(self):
         return len(self.hand)
-
-    def deck_size(self):
-        return len(self.deck)
 
 
 def first_index(iterable, condition=lambda x: True):
@@ -138,3 +138,16 @@ class Game:
 
     def activate(self, card):
         self.field = self.field.activate(card)
+
+    def fetch_hand(self, player):
+        return self._fetch_field(player).hand
+
+    def fetch_monsters(self, player):
+        return self._fetch_field(player).monsters
+
+    def _fetch_field(self, player):
+        return (
+            self.field.active_player
+            if player == self.current_player
+            else self.field.inactive_player
+        )

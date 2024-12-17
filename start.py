@@ -1,6 +1,6 @@
 from tkinter import Label, Tk
 from cards import find_card
-from game import Game, Zone
+from game import Game, Player, Zone
 
 
 def create_deck():
@@ -37,7 +37,7 @@ class GameWindow(Tk):
     def _draw_player_hand(
         self,
     ):
-        for i, card in enumerate(self.game.field.active_player.hand):
+        for i, card in enumerate(self.game.fetch_hand(Player.One)):
             label = Label(self, text=card.name)
             label.grid(row=4, column=i)
 
@@ -51,13 +51,13 @@ class GameWindow(Tk):
     def _draw_opponent_hand(
         self,
     ):
-        for i, card in enumerate(self.game.field.inactive_player.hand):
+        for i, card in enumerate(self.game.fetch_hand(Player.Two)):
             label = Label(self, text="Hidden")
             label.grid(row=0, column=i)
             self.cards.append(label)
 
     def _draw_monster_zone(self):
-        for i, card in enumerate(self.game.field.active_player.monsters):
+        for i, card in enumerate(self.game.fetch_monsters(Player.One)):
             card_text = card.name if card else "Empty"
             label = Label(self, text=card_text)
             label.grid(row=3, column=i)
