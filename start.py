@@ -27,6 +27,18 @@ def create_deck():
     ]
 
 
+class BadBot:
+    def __init__(self, game):
+        self.game = game
+
+    def play(self):
+        try:
+            self.game.activate(1)
+        except:
+            pass
+        self.game.end_turn()
+
+
 class GameWindow(Tk):
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
@@ -46,7 +58,8 @@ class GameWindow(Tk):
         self.cards = []
         self._draw_opponent_hand()
         self._draw_player_hand()
-        self._draw_monster_zone()
+        self._draw_player_monster_zone()
+        self._draw_opponent_monster_zone()
 
     def _draw_player_hand(
         self,
@@ -70,11 +83,18 @@ class GameWindow(Tk):
             label.grid(row=0, column=i)
             self.cards.append(label)
 
-    def _draw_monster_zone(self):
+    def _draw_player_monster_zone(self):
         for i, card in enumerate(self.game.fetch_monsters(Player.One)):
             card_text = card.name if card else "Empty"
             label = Label(self, text=card_text)
             label.grid(row=3, column=i)
+            self.cards.append(label)
+
+    def _draw_opponent_monster_zone(self):
+        for i, card in enumerate(self.game.fetch_monsters(Player.Two)):
+            card_text = card.name if card else "Empty"
+            label = Label(self, text=card_text)
+            label.grid(row=1, column=i)
             self.cards.append(label)
 
     def _draw_end_turn_button(self):
@@ -90,6 +110,8 @@ class GameWindow(Tk):
 
     def _end_turn(self):
         self.game.end_turn()
+
+        BadBot(self.game).play()
         self._redraw()
 
 
