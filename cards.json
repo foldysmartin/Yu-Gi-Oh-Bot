@@ -1,9 +1,173 @@
-[{
-    "name": "Mystical Elf",
-    "card_type": "Monster",
-    "attribute": "Light",
-    "type": "Spellcaster",
-    "level": 4,
-    "attack": 800,
-    "defence": 2000
-}]
+[
+    {
+        "name": "Mystical Elf",
+        "card_type": "Monster",
+        "attribute": "Light",
+        "type": "Spellcaster",
+        "level": 4,
+        "attack": 800,
+        "defence": 2000
+    },
+    {
+        "name": "Feral Imp",
+        "card_type": "Monster",
+        "attribute": "Dark",
+        "type": "Fiend",
+        "level": 4,
+        "attack": 1300,
+        "defence": 1400
+    },
+    {
+        "name": "Winged Dragon, Guardian of the Fortress #1",
+        "card_type": "Monster",
+        "attribute": "Wind",
+        "type": "Dragon",
+        "level": 4,
+        "attack": 1400,
+        "defence": 1200
+    },
+    {
+        "name": "Beaver Warrior",
+        "card_type": "Monster",
+        "attribute": "Earth",
+        "type": "Beast-Warrior",
+        "level": 4,
+        "attack": 1200,
+        "defence": 1500
+    },
+    {
+        "name": "Celtic Guardian",
+        "card_type": "Monster",
+        "attribute": "Earth",
+        "type": "Warrior",
+        "level": 4,
+        "attack": 1400,
+        "defence": 1200
+    },
+    {
+        "name": "Mammoth Graveyard",
+        "card_type": "Monster",
+        "attribute": "Earth",
+        "type": "Dinosaur",
+        "level": 3,
+        "attack": 1200,
+        "defence": 800
+    },
+    {
+        "name": "Great White",
+        "card_type": "Monster",
+        "attribute": "Water",
+        "type": "Fish",
+        "level": 4,
+        "attack": 1600,
+        "defence": 800
+    },
+    {
+        "name": "Silver Fang",
+        "card_type": "Monster",
+        "attribute": "Earth",
+        "type": "Beast",
+        "level": 3,
+        "attack": 1200,
+        "defence": 800
+    },
+    {
+        "name": "Giant Soldier of Stone",
+        "card_type": "Monster",
+        "attribute": "Earth",
+        "type": "Rock",
+        "level": 3,
+        "attack": 1300,
+        "defence": 2000
+    },
+    {
+        "name": "Dragon Zombie",
+        "card_type": "Monster",
+        "attribute": "Dark",
+        "type": "Zombie",
+        "level": 3,
+        "attack": 1600,
+        "defence": 0
+    },
+    {
+        "name": "Witty Phantom",
+        "card_type": "Monster",
+        "attribute": "Dark",
+        "type": "Fiend",
+        "level": 4,
+        "attack": 1400,
+        "defence": 1300
+    },
+    {
+        "name": "Claw Reacher",
+        "card_type": "Monster",
+        "attribute": "Dark",
+        "type": "Fiend",
+        "level": 3,
+        "attack": 1000,
+        "defence": 800
+    },
+    {
+        "name": "Mystic Clown",
+        "card_type": "Monster",
+        "attribute": "Dark",
+        "type": "Fiend",
+        "level": 4,
+        "attack": 1500,
+        "defence": 1000
+    },
+    {
+        "name": "Ancient Elf",
+        "card_type": "Monster",
+        "attribute": "Light",
+        "type": "Spellcaster",
+        "level": 4,
+        "attack": 1450,
+        "defence": 1200
+    },
+    {
+        "name": "Magical Ghost",
+        "card_type": "Monster",
+        "attribute": "Dark",
+        "type": "Zombie",
+        "level": 4,
+        "attack": 1300,
+        "defence": 1400
+    },
+    {
+        "name": "Neo the Magic Swordsman",
+        "card_type": "Monster",
+        "attribute": "Light",
+        "type": "Spellcaster",
+        "level": 4,
+        "attack": 1700,
+        "defence": 1000
+    },
+    {
+        "name": "Baron of the Fiend Sword",
+        "card_type": "Monster",
+        "attribute": "Dark",
+        "type": "Fiend",
+        "level": 4,
+        "attack": 1550,
+        "defence": 800
+    },
+    {
+        "name": "Man-Eating Treasure Chest",
+        "card_type": "Monster",
+        "attribute": "Dark",
+        "type": "Fiend",
+        "level": 4,
+        "attack": 1600,
+        "defence": 1000
+    },
+    {
+        "name": "Sorcerer of the Doomed",
+        "card_type": "Monster",
+        "attribute": "Dark",
+        "type": "Spellcaster",
+        "level": 4,
+        "attack": 1450,
+        "defence": 1200
+    }
+]

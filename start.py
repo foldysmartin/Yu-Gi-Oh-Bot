@@ -6,11 +6,24 @@ from game import Game, Player
 def create_deck():
     return [
         find_card("Mystical Elf"),
-        find_card("Mystical Elf"),
-        find_card("Mystical Elf"),
-        find_card("Mystical Elf"),
-        find_card("Mystical Elf"),
-        find_card("Mystical Elf"),
+        find_card("Feral Imp"),
+        find_card("Winged Dragon, Guardian of the Fortress #1"),
+        find_card("Beaver Warrior"),
+        find_card("Celtic Guardian"),
+        find_card("Mammoth Graveyard"),
+        find_card("Great White"),
+        find_card("Silver Fang"),
+        find_card("Giant Soldier of Stone"),
+        find_card("Dragon Zombie"),
+        find_card("Witty Phantom"),
+        find_card("Claw Reacher"),
+        find_card("Mystic Clown"),
+        find_card("Ancient Elf"),
+        find_card("Magical Ghost"),
+        find_card("Neo the Magic Swordsman"),
+        find_card("Baron of the Fiend Sword"),
+        find_card("Man-Eating Treasure Chest"),
+        find_card("Sorcerer of the Doomed"),
     ]
 
 
