@@ -1,3 +1,6 @@
+from dataclasses import dataclass, replace
+
+
 @dataclass(frozen=True)
 class GameState:
     normal_summoned = False

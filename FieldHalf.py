@@ -38,7 +38,7 @@ class FieldHalf(AbstractField):
             raise HandEmptyError("No cards to activate")
 
         effect = self.hand[card_number - 1].activate()
-        return effect.apply(self)
+        return effect
 
     def deck_size(self):
         return len(self.deck)

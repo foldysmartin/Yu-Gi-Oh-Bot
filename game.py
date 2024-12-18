@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 from Field import Field
+from game_state import GameState
 
 
 class Player(Enum):
@@ -20,6 +21,7 @@ class Game:
     field: Field
     phase: Phase
     current_player: Player = Player.One
+    game_state: GameState = GameState()
 
     def __init__(self, field):
 
@@ -38,7 +40,8 @@ class Game:
         )
 
     def activate(self, card):
-        self.field = self.field.activate(card)
+        effect = self.field.activate(card)
+        self.field = self.field.apply(effect)
 
     def fetch_hand(self, player):
         return self._fetch_field(player).hand
