@@ -1,5 +1,7 @@
 from tkinter import Button, Label, Tk
+from abstract_field import Zone
 from cards import find_card
+from empty_space import EmptySpace
 from game import Game, Player
 
 
@@ -33,7 +35,7 @@ class BadBot:
 
     def play(self):
         try:
-            self.game.activate(1)
+            self.game.play_from_hand(1)
         except:
             pass
         self.game.end_turn()
@@ -45,7 +47,6 @@ class GameWindow(Tk):
 
         self.geometry("600x400+50+50")
         self.resizable(0, 0)
-
         self.cards = []
         self.game = Game.start(create_deck(), create_deck())
 
@@ -56,6 +57,7 @@ class GameWindow(Tk):
         for card in self.cards:
             card.destroy()
         self.cards = []
+        self.selected = None
         self._draw_opponent_hand()
         self._draw_player_hand()
         self._draw_player_monster_zone()
@@ -85,16 +87,18 @@ class GameWindow(Tk):
 
     def _draw_player_monster_zone(self):
         for i, card in enumerate(self.game.fetch_monsters(Player.One)):
-            card_text = card.name if card else "Empty"
+            card_text = card.name if type(card) is not EmptySpace else "Empty"
             label = Label(self, text=card_text)
             label.grid(row=3, column=i)
+            label.bind("<Button-1>", self._select_lambda(Zone(i)))
             self.cards.append(label)
 
     def _draw_opponent_monster_zone(self):
         for i, card in enumerate(self.game.fetch_monsters(Player.Two)):
-            card_text = card.name if card else "Empty"
+            card_text = card.name if type(card) is not EmptySpace else "Empty"
             label = Label(self, text=card_text)
             label.grid(row=1, column=i)
+            label.bind("<Button-1>", self._attack_lambda(Zone(i)))
             self.cards.append(label)
 
     def _draw_end_turn_button(self):
@@ -107,6 +111,21 @@ class GameWindow(Tk):
     def _card_in_hand(self, card_number):
         self.game.play_from_hand(card_number)
         self._redraw()
+
+    def _select_lambda(self, zone):
+        return lambda event: self._select(event.widget, zone)
+
+    def _select(self, widget, zone):
+        widget.config(bg="red")
+        self.selected = zone
+
+    def _attack_lambda(self, zone):
+        return lambda event: self._attack(zone)
+
+    def _attack(self, zone):
+        if self.selected:
+            self.game.battle(self.selected, zone)
+            self._redraw()
 
     def _end_turn(self):
         self.game.end_turn()

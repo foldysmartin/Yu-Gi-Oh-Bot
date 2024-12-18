@@ -3,6 +3,7 @@ from enum import Enum
 from typing import List
 
 from card import Card
+from empty_space import EmptySpace
 
 
 # Todo move to a more appropriate file
@@ -20,11 +21,11 @@ class AbstractFieldHalf:
     hand: List[Card] = field(default_factory=list)
     monsters: List[Card] = field(
         default_factory=lambda: [
-            None,
-            None,
-            None,
-            None,
-            None,
+            EmptySpace(),
+            EmptySpace(),
+            EmptySpace(),
+            EmptySpace(),
+            EmptySpace(),
         ]  # Should maybe be an empty slot type
     )
 
@@ -34,7 +35,9 @@ class AbstractFieldHalf:
     def destroy_monster(self, index):
         return replace(
             self,
-            monsters=self.monsters[:index] + [None] + self.monsters[index + 1 :],
+            monsters=self.monsters[:index]
+            + [EmptySpace()]
+            + self.monsters[index + 1 :],
         )
 
 

@@ -1,6 +1,7 @@
 from dataclasses import dataclass, replace
 from uuid import UUID
 from abstract_field import AbstractField, AbstractFieldHalf
+from empty_space import EmptySpace
 from game_state import GameState
 from invalid_target_error import InvalidTargetError
 
@@ -26,7 +27,9 @@ class Summon(Effect):
         if game_state.normal_summoned:
             raise SummoningError("Already normal summoned this turn")
 
-        zone = first_index(active_player.monsters, lambda monster: monster == None)
+        zone = first_index(
+            active_player.monsters, lambda monster: monster == EmptySpace()
+        )
         if zone == None:
             raise SummoningError("No empty zones to summon to")
 

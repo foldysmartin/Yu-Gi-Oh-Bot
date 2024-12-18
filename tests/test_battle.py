@@ -12,20 +12,20 @@ def test_attacker_is_destroyed_if_other_card_has_greater_attack():
     attacker = find_card("Mystical Elf")
     defender = find_card("Giant Soldier of Stone")
 
-    expected = Destroy(id=attacker.instance_id)
     outcome = attacker.battle(defender)
 
-    assert expected in outcome
+    assert Destroy(id=defender.instance_id) not in outcome
+    assert Destroy(id=attacker.instance_id) in outcome
 
 
 def test_defender_is_destroyed_if_attacker_has_greater_attack():
     attacker = find_card("Giant Soldier of Stone")
     defender = find_card("Mystical Elf")
 
-    expected = Destroy(id=defender.instance_id)
     outcome = attacker.battle(defender)
 
-    assert expected in outcome
+    assert Destroy(id=defender.instance_id) in outcome
+    assert Destroy(id=attacker.instance_id) not in outcome
 
 
 def test_both_cards_are_destroyed_if_attack_is_equal():
@@ -35,7 +35,8 @@ def test_both_cards_are_destroyed_if_attack_is_equal():
     expected = [Destroy(id=attacker.instance_id), Destroy(id=defender.instance_id)]
     outcome = attacker.battle(defender)
 
-    assert set(expected) <= set(outcome)
+    assert Destroy(id=defender.instance_id) in outcome
+    assert Destroy(id=attacker.instance_id) in outcome
 
 
 def test_battle_between_monsters():

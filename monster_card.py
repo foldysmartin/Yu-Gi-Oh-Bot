@@ -5,7 +5,7 @@ from card import Card
 from effects import Destroy, Summon
 
 
-@dataclass
+@dataclass(frozen=True)
 class MonsterCard(Card):
     name: str
     attack: int
@@ -18,7 +18,7 @@ class MonsterCard(Card):
     def battle(self, target):
         if self.attack < target.attack:
             return [Destroy(self.instance_id)]
-        elif self.attack > target.defence:
+        elif self.attack > target.attack:
             return [Destroy(target.instance_id)]
         else:
             return [Destroy(self.instance_id), Destroy(target.instance_id)]

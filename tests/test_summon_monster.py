@@ -1,4 +1,5 @@
 from pytest import raises
+from empty_space import EmptySpace
 from field_half import FieldHalf, HandEmptyError, Zone
 from abstract_field import AbstractField
 from cards import find_card
@@ -31,17 +32,10 @@ def test_can_summon_a_monster():
 def test_cannot_summon_if_zone_is_not_empty():
     monster = find_card("Mystical Elf")
 
-    field_half = FieldHalf([monster, monster, monster, monster, monster, monster])
-    field_half = field_half.draw(6)
+    field_half = FieldHalf(deck=[], hand=[monster], monsters=[monster])
     abstract_field = AbstractField(
         active_player=field_half, inactive_player=FieldHalf([])
     )
-
-    # Fill all 5 zones
-    for i in range(1, 6):
-        game_state, abstract_field = monster.play_from_hand().apply(
-            GameState(), abstract_field
-        )
 
     with raises(SummoningError):
         monster.play_from_hand().apply(GameState(), abstract_field)
@@ -51,8 +45,7 @@ def test_can_only_normal_summon_once_per_turn():
     monster = find_card("Mystical Elf")
 
     game_state = GameState()
-    field_half = FieldHalf([monster, monster])
-    field_half = field_half.draw(2)
+    field_half = FieldHalf(deck=[], hand=[monster, monster])
     abstract_field = AbstractField(
         active_player=field_half, inactive_player=FieldHalf([])
     )
