@@ -1,5 +1,5 @@
 from enum import Enum
-from abstract_field import AbstractField
+from abstract_field import AbstractFieldHalf
 from monster_card import MonsterCard
 
 
@@ -24,7 +24,7 @@ class HandEmptyError(Exception):
 
 
 @dataclass(frozen=True)
-class FieldHalf(AbstractField):
+class FieldHalf(AbstractFieldHalf):
     def draw(self, count=1):
         if count > self.deck_size():
             raise OutOfCards()

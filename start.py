@@ -1,6 +1,6 @@
 from tkinter import Label, Tk
 from cards import find_card
-from game import Game, Player, Zone
+from game import Game, Player
 
 
 def create_deck():
@@ -67,7 +67,6 @@ class GameWindow(Tk):
         return lambda e: self._card_in_hand(card_number)
 
     def _card_in_hand(self, card_number):
-        print(card_number)
         self.game.activate(card_number)
         self._redraw()
 

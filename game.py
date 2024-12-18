@@ -41,7 +41,7 @@ class Game:
 
     def activate(self, card):
         effect = self.field.activate(card)
-        self.field = self.field.apply(effect)
+        self.game_state, self.field = effect.apply(self.game_state, self.field)
 
     def fetch_hand(self, player):
         return self._fetch_field(player).hand

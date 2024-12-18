@@ -32,9 +32,3 @@ class Field:
 
     def activate(self, card_number):
         return self.active_player.activate(card_number)
-
-    def apply(
-        self,
-        effect,
-    ):
-        return replace(self, active_player=effect.apply(self.active_player))

@@ -5,7 +5,7 @@ from card import Card
 
 
 @dataclass(frozen=True)
-class AbstractField:
+class AbstractFieldHalf:
     deck: List[Card]
     hand: List[Card] = field(default_factory=list)
     monsters: List[Card] = field(
@@ -20,3 +20,9 @@ class AbstractField:
 
     def numberOfCards(self):
         return len(self.hand)
+
+
+@dataclass(frozen=True)
+class AbstractField:
+    active_player: AbstractFieldHalf
+    inactive_player: AbstractFieldHalf
