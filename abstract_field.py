@@ -1,7 +1,17 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
+from enum import Enum
 from typing import List
 
 from card import Card
+
+
+# Todo move to a more appropriate file
+class Zone(Enum):
+    First = 0
+    Second = 1
+    Third = 2
+    Fourth = 3
+    Fith = 4
 
 
 @dataclass(frozen=True)
@@ -20,6 +30,12 @@ class AbstractFieldHalf:
 
     def numberOfCards(self):
         return len(self.hand)
+
+    def destroy_monster(self, index):
+        return replace(
+            self,
+            monsters=self.monsters[:index] + [None] + self.monsters[index + 1 :],
+        )
 
 
 @dataclass(frozen=True)

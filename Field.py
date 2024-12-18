@@ -1,4 +1,5 @@
-from FieldHalf import FieldHalf
+from invalid_target_error import InvalidTargetError
+from field_half import FieldHalf
 
 
 from dataclasses import dataclass, replace
@@ -32,3 +33,12 @@ class Field:
 
     def play_from_hand(self, card_number):
         return self.active_player.play_from_hand(card_number)
+
+    def battle(self, attacker_zone, defender_zone):
+        attacker = self.active_player.monsterAt(attacker_zone)
+        defender = self.inactive_player.monsterAt(defender_zone)
+
+        if defender is None or attacker is None:
+            raise InvalidTargetError("No monster in defender zone")
+
+        return attacker.battle(defender)

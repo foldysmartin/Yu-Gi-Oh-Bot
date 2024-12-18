@@ -44,6 +44,10 @@ class Game:
         effect = self.field.play_from_hand(card)
         self.game_state, self.field = effect.apply(self.game_state, self.field)
 
+    def battle(self, attacker_zone, defender_zone):
+        effect = self.field.battle(attacker_zone, defender_zone)
+        self.game_state, self.field = effect.apply(self.game_state, self.field)
+
     def fetch_hand(self, player):
         return self._fetch_field(player).hand
 

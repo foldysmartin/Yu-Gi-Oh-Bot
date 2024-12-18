@@ -1,5 +1,5 @@
 from pytest import raises
-from FieldHalf import FieldHalf, HandEmptyError, Zone
+from field_half import FieldHalf, HandEmptyError, Zone
 from abstract_field import AbstractField
 from cards import find_card
 from effects import Summon, SummoningError

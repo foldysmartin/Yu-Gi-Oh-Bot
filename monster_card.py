@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from uuid import UUID
 
 from card import Card
-from effects import Summon
+from effects import Destroy, Summon
 
 
 @dataclass
@@ -14,3 +14,11 @@ class MonsterCard(Card):
 
     def play_from_hand(self):
         return Summon(self.instance_id)
+
+    def battle(self, target):
+        if self.attack < target.attack:
+            return [Destroy(self.instance_id)]
+        elif self.attack > target.defence:
+            return [Destroy(target.instance_id)]
+        else:
+            return [Destroy(self.instance_id), Destroy(target.instance_id)]

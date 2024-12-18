@@ -1,7 +1,8 @@
 from dataclasses import dataclass, replace
 from uuid import UUID
-from abstract_field import AbstractField
+from abstract_field import AbstractField, AbstractFieldHalf
 from game_state import GameState
+from invalid_target_error import InvalidTargetError
 
 
 class Effect:
@@ -49,6 +50,31 @@ class Summon(Effect):
             field,
             active_player=active_player,
         )
+
+
+@dataclass(frozen=True)
+class Destroy(Effect):
+    id: UUID
+
+    def apply(self, game_state: GameState, field: AbstractField):
+        monster = first_index(
+            field.active_player.monsters, lambda monster: monster.instance_id == self.id
+        )
+        if monster is not None:
+            return game_state, replace(
+                field, active_player=field.active_player.destroy_monster(monster)
+            )
+
+        monster = first_index(
+            field.inactive_player.monsters,
+            lambda monster: monster.instance_id == self.id,
+        )
+        if monster is not None:
+            return game_state, replace(
+                field, inactive_player=field.inactive_player.destroy_monster(monster)
+            )
+
+        raise InvalidTargetError("Monster not found")
 
 
 def first_index(iterable, condition=lambda x: True):
