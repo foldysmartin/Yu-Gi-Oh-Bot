@@ -105,7 +105,7 @@ class GameWindow(Tk):
         return lambda e: self._card_in_hand(card_number)
 
     def _card_in_hand(self, card_number):
-        self.game.activate(card_number)
+        self.game.play_from_hand(card_number)
         self._redraw()
 
     def _end_turn(self):

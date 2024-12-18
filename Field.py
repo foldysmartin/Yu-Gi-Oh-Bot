@@ -30,5 +30,5 @@ class Field:
     def draw(self, count=1):
         return replace(self, active_player=self.active_player.draw(count))
 
-    def activate(self, card_number):
-        return self.active_player.activate(card_number)
+    def play_from_hand(self, card_number):
+        return self.active_player.play_from_hand(card_number)

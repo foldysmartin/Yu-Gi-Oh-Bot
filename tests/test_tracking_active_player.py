@@ -38,6 +38,6 @@ def test_get_monsters():
 
     game = Game.start(deck, deck)
 
-    game.activate(1)
+    game.play_from_hand(1)
     assert len(game.fetch_monsters(Player.One)) == 5
     game.fetch_monsters(Player.One)[0] == monster

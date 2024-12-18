@@ -33,7 +33,7 @@ class FieldHalf(AbstractFieldHalf):
             self, hand=self.hand + self.deck[0:count], deck=self.deck[count:]
         )
 
-    def activate(self, card_number):
+    def play_from_hand(self, card_number):
         if len(self.hand) == 0:
             raise HandEmptyError("No cards to activate")
 

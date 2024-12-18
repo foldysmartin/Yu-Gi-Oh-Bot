@@ -12,5 +12,5 @@ class MonsterCard(Card):
     defence: int
     level: int
 
-    def activate(self):
+    def play_from_hand(self):
         return Summon(self.instance_id)

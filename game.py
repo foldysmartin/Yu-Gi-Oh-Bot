@@ -40,8 +40,8 @@ class Game:
             Player.Two if self.current_player == Player.One else Player.One
         )
 
-    def activate(self, card):
-        effect = self.field.activate(card)
+    def play_from_hand(self, card):
+        effect = self.field.play_from_hand(card)
         self.game_state, self.field = effect.apply(self.game_state, self.field)
 
     def fetch_hand(self, player):

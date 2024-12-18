@@ -6,4 +6,4 @@ def test_cannot_activate_card_if_hand_is_empty():
     field_half = FieldHalf([])
 
     with raises(HandEmptyError):
-        field_half.activate(1)
+        field_half.play_from_hand(1)

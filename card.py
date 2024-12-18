@@ -6,5 +6,5 @@ from uuid import UUID
 class Card:
     instance_id: UUID
 
-    def activate(self):
+    def play_from_hand(self):
         raise NotImplementedError()
