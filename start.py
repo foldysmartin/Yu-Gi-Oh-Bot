@@ -1,4 +1,4 @@
-from tkinter import Label, Tk
+from tkinter import Button, Label, Tk
 from cards import find_card
 from game import Game, Player
 
@@ -25,6 +25,7 @@ class GameWindow(Tk):
         self.game = Game.start(create_deck(), create_deck())
 
         self._redraw()
+        self._draw_end_turn_button()
 
     def _redraw(self):
         for card in self.cards:
@@ -63,11 +64,19 @@ class GameWindow(Tk):
             label.grid(row=3, column=i)
             self.cards.append(label)
 
+    def _draw_end_turn_button(self):
+        button = Button(self, text="End Turn", command=self._end_turn)
+        button.grid(row=5, column=0, columnspan=6)
+
     def _card_in_hand_lambda(self, card_number):
         return lambda e: self._card_in_hand(card_number)
 
     def _card_in_hand(self, card_number):
         self.game.activate(card_number)
+        self._redraw()
+
+    def _end_turn(self):
+        self.game.end_turn()
         self._redraw()
 
 

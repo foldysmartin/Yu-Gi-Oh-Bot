@@ -35,6 +35,7 @@ class Game:
     def end_turn(self):
         self.phase = Phase.Draw
         self.field = self.field.end_turn()
+        self.game_state = self.game_state.end_turn()
         self.current_player = (
             Player.Two if self.current_player == Player.One else Player.One
         )
