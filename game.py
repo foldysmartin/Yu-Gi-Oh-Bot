@@ -2,12 +2,8 @@ from dataclasses import dataclass
 from enum import Enum
 
 from Field import Field
+from Player import Player
 from game_state import GameState
-
-
-class Player(Enum):
-    One = 1
-    Two = 2
 
 
 class Phase(Enum):
@@ -20,7 +16,6 @@ class Game:
     turn = 0
     field: Field
     phase: Phase
-    current_player: Player = Player.One
     game_state: GameState = GameState()
 
     def __init__(self, field):
@@ -36,16 +31,13 @@ class Game:
         self.phase = Phase.Draw
         self.field = self.field.end_turn()
         self.game_state = self.game_state.end_turn()
-        self.current_player = (
-            Player.Two if self.current_player == Player.One else Player.One
-        )
 
     def play_from_hand(self, card):
         effect = self.field.play_from_hand(card)
         self.game_state, self.field = effect.apply(self.game_state, self.field)
 
-    def battle(self, attacker_zone, defender_zone):
-        effects = self.field.battle(attacker_zone, defender_zone)
+    def battle(self, attacker_zone, target):
+        effects = self.field.attack(attacker_zone, target)
 
         for effect in effects:
             print(effect)
@@ -60,6 +52,6 @@ class Game:
     def _fetch_field(self, player):
         return (
             self.field.active_player
-            if player == self.current_player
+            if player == self.game_state.active_player
             else self.field.inactive_player
         )

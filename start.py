@@ -1,8 +1,10 @@
 from tkinter import Button, Label, Tk
+from Field import BattleTarget
+from Player import Player
 from abstract_field import Zone
 from cards import find_card
 from empty_space import EmptySpace
-from game import Game, Player
+from game import Game
 
 
 def create_deck():
@@ -58,17 +60,34 @@ class GameWindow(Tk):
             card.destroy()
         self.cards = []
         self.selected = None
+        self._draw_life_points()
         self._draw_opponent_hand()
         self._draw_player_hand()
         self._draw_player_monster_zone()
         self._draw_opponent_monster_zone()
+
+    def _draw_life_points(self):
+        player_1_life_points = Label(
+            self,
+            text=f"Player 1 Life Points: {self.game.game_state.life_points(player=Player.One)}",
+        )
+        player_1_life_points.grid(row=6, column=0, columnspan=6)
+
+        player_2_life_points = Label(
+            self,
+            text=f"Player 2 Life Points: {self.game.game_state.life_points(player=Player.Two)}",
+        )
+        player_2_life_points.bind(
+            "<Button-1>", self._attack_lambda(BattleTarget.Direct)
+        )
+        player_2_life_points.grid(row=0, column=0, columnspan=6)
 
     def _draw_player_hand(
         self,
     ):
         for i, card in enumerate(self.game.fetch_hand(Player.One)):
             label = Label(self, text=card.name)
-            label.grid(row=4, column=i)
+            label.grid(row=5, column=i)
 
             card_number = i + 1
             label.bind(
@@ -82,14 +101,14 @@ class GameWindow(Tk):
     ):
         for i, card in enumerate(self.game.fetch_hand(Player.Two)):
             label = Label(self, text="Hidden")
-            label.grid(row=0, column=i)
+            label.grid(row=1, column=i)
             self.cards.append(label)
 
     def _draw_player_monster_zone(self):
         for i, card in enumerate(self.game.fetch_monsters(Player.One)):
             card_text = card.name if type(card) is not EmptySpace else "Empty"
             label = Label(self, text=card_text)
-            label.grid(row=3, column=i)
+            label.grid(row=4, column=i)
             label.bind("<Button-1>", self._select_lambda(Zone(i)))
             self.cards.append(label)
 
@@ -97,13 +116,13 @@ class GameWindow(Tk):
         for i, card in enumerate(self.game.fetch_monsters(Player.Two)):
             card_text = card.name if type(card) is not EmptySpace else "Empty"
             label = Label(self, text=card_text)
-            label.grid(row=1, column=i)
-            label.bind("<Button-1>", self._attack_lambda(Zone(i)))
+            label.grid(row=2, column=i)
+            label.bind("<Button-1>", self._attack_lambda(BattleTarget(i)))
             self.cards.append(label)
 
     def _draw_end_turn_button(self):
         button = Button(self, text="End Turn", command=self._end_turn)
-        button.grid(row=5, column=0, columnspan=6)
+        button.grid(row=7, column=0, columnspan=6)
 
     def _card_in_hand_lambda(self, card_number):
         return lambda e: self._card_in_hand(card_number)
@@ -119,12 +138,12 @@ class GameWindow(Tk):
         widget.config(bg="red")
         self.selected = zone
 
-    def _attack_lambda(self, zone):
-        return lambda event: self._attack(zone)
+    def _attack_lambda(self, target):
+        return lambda event: self._attack(target)
 
-    def _attack(self, zone):
+    def _attack(self, target):
         if self.selected:
-            self.game.battle(self.selected, zone)
+            self.game.battle(self.selected, target)
             self._redraw()
 
     def _end_turn(self):

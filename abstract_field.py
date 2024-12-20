@@ -32,6 +32,9 @@ class AbstractFieldHalf:
     def numberOfCards(self):
         return len(self.hand)
 
+    def has_monsters(self):
+        return any(not isinstance(monster, EmptySpace) for monster in self.monsters)
+
     def destroy_monster(self, index):
         return replace(
             self,

@@ -80,6 +80,18 @@ class Destroy(Effect):
         raise InvalidTargetError("Monster not found")
 
 
+@dataclass(frozen=True)
+class LoseLifePoints(Effect):
+    attacker: bool
+    life_points: int
+
+    def apply(self, game_state: GameState, field: AbstractField):
+        player = (
+            game_state.active_player if self.attacker else game_state.inactive_player
+        )
+        return game_state.lose_life_points(player, self.life_points), field
+
+
 def first_index(iterable, condition=lambda x: True):
     return next((i for i, x in enumerate(iterable) if condition(x)), None)
 

@@ -1,26 +1,22 @@
 from Field import Field
+from Player import Player
 from cards import find_card
-from game import Player, Game
+from game import Game
+from game_state import GameState
 
 
 def test_starting_active_player_is_player_1():
-    monster = find_card("Mystical Elf")
-    deck = [monster, monster, monster, monster, monster, monster]
-
-    game = Game.start(deck, deck)
-    assert game.current_player == Player.One
+    gamestate = GameState()
+    assert gamestate.active_player == Player.One
 
 
 def test_switch_active_player():
-    monster = find_card("Mystical Elf")
-    deck = [monster, monster, monster, monster, monster, monster, monster]
+    gamestate = GameState()
+    gamestate = gamestate.end_turn()
+    assert gamestate.active_player == Player.Two
 
-    game = Game.start(deck, deck)
-    game.end_turn()
-    assert game.current_player == Player.Two
-
-    game.end_turn()
-    assert game.current_player == Player.One
+    gamestate = gamestate.end_turn()
+    assert gamestate.active_player == Player.One
 
 
 def test_get_hand():
