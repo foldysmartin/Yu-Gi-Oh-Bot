@@ -40,7 +40,9 @@ class BadBot:
             self.game.play_from_hand(1)
         except:
             pass
-        self.game.end_turn()
+        self.game.next_phase()
+        self.game.next_phase()
+        self.game.next_phase()
 
 
 class GameWindow(Tk):
@@ -53,7 +55,6 @@ class GameWindow(Tk):
         self.game = Game.start(create_deck(), create_deck())
 
         self._redraw()
-        self._draw_end_turn_button()
 
     def _redraw(self):
         for card in self.cards:
@@ -65,6 +66,7 @@ class GameWindow(Tk):
         self._draw_player_hand()
         self._draw_player_monster_zone()
         self._draw_opponent_monster_zone()
+        self._draw_next_phase_button()
 
     def _draw_life_points(self):
         player_1_life_points = Label(
@@ -120,9 +122,17 @@ class GameWindow(Tk):
             label.bind("<Button-1>", self._attack_lambda(BattleTarget(i)))
             self.cards.append(label)
 
-    def _draw_end_turn_button(self):
-        button = Button(self, text="End Turn", command=self._end_turn)
-        button.grid(row=7, column=0, columnspan=6)
+    def _draw_next_phase_button(self):
+        button = Button(self, text="Next Phase", command=self._next_phase)
+        label = Label(self, text="Current Phase: " + str(self.game.game_state.phase))
+        button.grid(
+            row=7,
+            column=0,
+        )
+        label.grid(
+            row=7,
+            column=1,
+        )
 
     def _card_in_hand_lambda(self, card_number):
         return lambda e: self._card_in_hand(card_number)
@@ -146,10 +156,11 @@ class GameWindow(Tk):
             self.game.battle(self.selected, target)
             self._redraw()
 
-    def _end_turn(self):
-        self.game.end_turn()
+    def _next_phase(self):
+        self.game.next_phase()
 
-        BadBot(self.game).play()
+        if self.game.game_state.active_player == Player.Two:
+            BadBot(self.game).play()
         self._redraw()
 
 

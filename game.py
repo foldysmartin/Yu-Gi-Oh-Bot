@@ -3,11 +3,7 @@ from enum import Enum
 
 from Field import Field
 from Player import Player
-from game_state import GameState
-
-
-class Phase(Enum):
-    Draw = 0
+from game_state import GameState, Phase
 
 
 @dataclass()
@@ -15,11 +11,9 @@ class Game:
 
     turn = 0
     field: Field
-    phase: Phase
     game_state: GameState = GameState()
 
     def __init__(self, field):
-
         self.phase = Phase.Draw
         self.field = field
 
@@ -27,10 +21,11 @@ class Game:
         field = Field.game_start(deck_1, deck_2)
         return Game(field)
 
-    def end_turn(self):
-        self.phase = Phase.Draw
-        self.field = self.field.end_turn()
-        self.game_state = self.game_state.end_turn()
+    def next_phase(self):
+        self.game_state = self.game_state.change_phase()
+        if self.game_state.phase == Phase.Draw:
+            self.field = self.field.end_turn()
+            self.game_state = self.game_state.change_phase()
 
     def play_from_hand(self, card):
         effect = self.field.play_from_hand(card)
@@ -40,7 +35,6 @@ class Game:
         effects = self.field.attack(attacker_zone, target)
 
         for effect in effects:
-            print(effect)
             self.game_state, self.field = effect.apply(self.game_state, self.field)
 
     def fetch_hand(self, player):

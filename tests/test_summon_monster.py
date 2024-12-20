@@ -57,3 +57,14 @@ def test_can_only_normal_summon_once_per_turn():
         game_state, abstract_field = monster.play_from_hand().apply(
             game_state, abstract_field
         )
+
+
+def test_can_only_normal_summon_in_main_phase():
+    game_state = GameState()
+    assert game_state.can_normal_summon() == True
+
+    game_state = game_state.change_phase()
+    assert game_state.can_normal_summon() == False
+
+    game_state = game_state.change_phase()
+    assert game_state.can_normal_summon() == True

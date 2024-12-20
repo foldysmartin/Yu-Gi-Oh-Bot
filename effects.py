@@ -24,7 +24,7 @@ class Summon(Effect):
         if active_player.numberOfCards() == 0:
             raise SummoningError("No cards to summon")
 
-        if game_state.normal_summoned:
+        if not game_state.can_normal_summon():
             raise SummoningError("Already normal summoned this turn")
 
         zone = first_index(
