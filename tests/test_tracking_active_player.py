@@ -1,6 +1,7 @@
-from Field import Field
+from abstract_field import Zone
+from cards.load_card import find_card
+from field import BattleTarget, Field
 from Player import Player
-from cards import find_card
 from game import Game
 from game_state import GameState
 
@@ -35,5 +36,5 @@ def test_get_monsters():
     game = Game.start(deck, deck)
 
     game.play_from_hand(1)
-    assert len(game.fetch_monsters(Player.One)) == 5
-    game.fetch_monsters(Player.One)[0] == monster
+    assert len(game.fetch_monsters(Player.One)) == 1
+    game.fetch_monsters(Player.One)[Zone.First] == monster

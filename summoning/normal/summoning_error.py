@@ -1,0 +1,2 @@
+class SummoningError(Exception):
+    pass

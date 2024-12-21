@@ -1,6 +1,5 @@
 from enum import Enum
 from abstract_field import AbstractFieldHalf, Zone
-from monster_card import MonsterCard
 
 
 class OutOfCards(Exception):
@@ -29,11 +28,8 @@ class FieldHalf(AbstractFieldHalf):
         if len(self.hand) == 0:
             raise HandEmptyError("No cards to play")
 
-        effect = self.hand[card_number - 1].play_from_hand()
-        return effect
+        action = self.hand[card_number - 1].activate()
+        return action
 
     def deck_size(self):
         return len(self.deck)
-
-    def monsterAt(self, zone: Zone):
-        return self.monsters[zone.value]

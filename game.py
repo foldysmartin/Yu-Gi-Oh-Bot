@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum
 
-from Field import Field
+from field import BattleTarget, Field
 from Player import Player
 from game_state import GameState, Phase
 
@@ -28,14 +28,18 @@ class Game:
             self.game_state = self.game_state.change_phase()
 
     def play_from_hand(self, card):
-        effect = self.field.play_from_hand(card)
-        self.game_state, self.field = effect.apply(self.game_state, self.field)
+        action = self.field.play_from_hand(card)
+        self.field, self.game_state = action.activate(
+            self.field, self.game_state
+        ).apply(self.field, self.game_state)
 
     def battle(self, attacker_zone, target):
-        effects = self.field.attack(attacker_zone, target)
+        effects = self.field.attack(attacker_zone, target).activate(
+            self.field, self.game_state
+        )
 
         for effect in effects:
-            self.game_state, self.field = effect.apply(self.game_state, self.field)
+            self.field, self.game_state = effect.apply(self.field, self.game_state)
 
     def fetch_hand(self, player):
         return self._fetch_field(player).hand

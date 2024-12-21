@@ -1,9 +1,8 @@
 from tkinter import Button, Label, Tk
-from Field import BattleTarget
 from Player import Player
 from abstract_field import Zone
-from cards import find_card
-from empty_space import EmptySpace
+from battling.to_battle import AttackTarget
+from cards.load_card import find_card
 from game import Game
 
 
@@ -80,7 +79,7 @@ class GameWindow(Tk):
             text=f"Player 2 Life Points: {self.game.game_state.life_points(player=Player.Two)}",
         )
         player_2_life_points.bind(
-            "<Button-1>", self._attack_lambda(BattleTarget.Direct)
+            "<Button-1>", self._attack_lambda(AttackTarget.Direct)
         )
         player_2_life_points.grid(row=0, column=0, columnspan=6)
 
@@ -107,19 +106,23 @@ class GameWindow(Tk):
             self.cards.append(label)
 
     def _draw_player_monster_zone(self):
-        for i, card in enumerate(self.game.fetch_monsters(Player.One)):
-            card_text = card.name if type(card) is not EmptySpace else "Empty"
-            label = Label(self, text=card_text)
+        monsters = self.game.fetch_monsters(Player.One)
+        for i, zone in enumerate(Zone):
+            card = monsters.get(zone)
+            card_name = card.name if card else "Empty"
+            label = Label(self, text=card_name)
             label.grid(row=4, column=i)
             label.bind("<Button-1>", self._select_lambda(Zone(i)))
             self.cards.append(label)
 
     def _draw_opponent_monster_zone(self):
-        for i, card in enumerate(self.game.fetch_monsters(Player.Two)):
-            card_text = card.name if type(card) is not EmptySpace else "Empty"
-            label = Label(self, text=card_text)
+        monsters = self.game.fetch_monsters(Player.Two)
+        for i, zone in enumerate(Zone):
+            card = monsters.get(zone)
+            card_name = card.name if card else "Empty"
+            label = Label(self, text=card_name)
             label.grid(row=2, column=i)
-            label.bind("<Button-1>", self._attack_lambda(BattleTarget(i)))
+            label.bind("<Button-1>", self._attack_lambda(AttackTarget(i)))
             self.cards.append(label)
 
     def _draw_next_phase_button(self):

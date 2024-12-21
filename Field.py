@@ -1,5 +1,6 @@
 from enum import Enum
-from invalid_target_error import InvalidTargetError
+from abstract_field import AbstractField
+from battling.to_battle import ToBattle
 from field_half import FieldHalf
 
 
@@ -16,7 +17,7 @@ class BattleTarget(Enum):
 
 
 @dataclass(frozen=True)
-class Field:
+class Field(AbstractField):
     active_player: FieldHalf
     inactive_player: FieldHalf
 
@@ -45,24 +46,4 @@ class Field:
         return self.active_player.play_from_hand(card_number)
 
     def attack(self, attacker_zone, target):
-        if target == BattleTarget.Direct:
-            return self._direct_attack(attacker_zone)
-        else:
-            return self._battle_monsters(attacker_zone, target)
-
-    def _direct_attack(self, attacker_zone):
-        if self.inactive_player.has_monsters():
-            raise InvalidTargetError(
-                "Cannot attack directly with monsters on the field"
-            )
-        attacker = self.active_player.monsterAt(attacker_zone)
-        return attacker.target_directly()
-
-    def _battle_monsters(self, attacker_zone, target):
-        attacker = self.active_player.monsterAt(attacker_zone)
-        defender = self.inactive_player.monsterAt(target)
-
-        if defender is None or attacker is None:
-            raise InvalidTargetError("No monster in defender zone")
-
-        return attacker.target_monster(defender)
+        return ToBattle(attacker_zone, target)
