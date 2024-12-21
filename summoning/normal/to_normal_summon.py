@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from abstract.action import Action
 from abstract_field import AbstractField
 from cards.monster_card import MonsterCard
-from game_state import GameState
+from game_state import GameState, Phase
 from summoning.normal.normal_summon import NormalSummon
 
 
@@ -21,5 +21,8 @@ class ToNormalSummon(Action):
 
         if game_state.normal_summoned:
             raise SummoningError("Already normal summoned this turn")
+
+        if not game_state.phase is Phase.Main1 and not game_state.phase is Phase.Main2:
+            raise SummoningError("Can only normal summon in main phases")
 
         return NormalSummon(self.card)

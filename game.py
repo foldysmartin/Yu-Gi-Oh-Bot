@@ -38,8 +38,7 @@ class Game:
             self.field, self.game_state
         )
 
-        for effect in effects:
-            self.field, self.game_state = effect.apply(self.field, self.game_state)
+        self.field, self.game_state = effects.apply(self.field, self.game_state)
 
     def fetch_hand(self, player):
         return self._fetch_field(player).hand

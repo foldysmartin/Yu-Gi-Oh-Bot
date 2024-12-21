@@ -1,7 +1,9 @@
 from dataclasses import dataclass, field, replace
 from enum import Enum
+from typing import List
 
 from Player import Player
+from cards.card import Card
 
 
 class Phase(Enum):
@@ -17,6 +19,9 @@ class GameState:
     normal_summoned: bool = False
     active_player: Player = Player.One
     phase: Phase = Phase.Main1
+    turn: int = 1
+
+    previous_attacks: List[Card] = field(default_factory=list)
 
     @property
     def inactive_player(self):
@@ -49,7 +54,12 @@ class GameState:
     def end_turn(self):
         active_player = Player.Two if self.active_player == Player.One else Player.One
         return replace(
-            self, normal_summoned=False, active_player=active_player, phase=Phase.Draw
+            self,
+            normal_summoned=False,
+            active_player=active_player,
+            phase=Phase.Draw,
+            turn=self.turn + 1,
+            previous_attacks=[],
         )
 
     def life_points(self, player):

@@ -77,3 +77,17 @@ def test_can_only_summon_once_per_turn():
         summon_action = monster2.activate()
         effect = summon_action.activate(field, game_state)
         field, game_state = effect.apply(field, game_state)
+
+
+def test_can_only_summon_in_normal_phases():
+    monster = find_card("Mystical Elf")
+    game_state = GameState(phase="battle")
+    field = AbstractField(
+        AbstractFieldHalf(deck=[], hand=[monster]),
+        AbstractFieldHalf(deck=[]),
+    )
+
+    with raises(Exception):
+        summon_action = monster.activate()
+        effect = summon_action.activate(field, game_state)
+        field, game_state = effect.apply(field, game_state)
