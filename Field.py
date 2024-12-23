@@ -31,7 +31,11 @@ class Field(AbstractField):
         return Field(_active_player, _inactive_player)
 
     def end_turn(self):
-        field = self._flip_active_player()
+        field = self
+        if field.active_player.numberOfCards() > 7:
+            discard = field.active_player.hand[0]
+            field = replace(field, active_player=field.active_player.discard(discard))
+        field = field._flip_active_player()
         return field.draw()
 
     def _flip_active_player(self):
@@ -41,9 +45,6 @@ class Field(AbstractField):
 
     def draw(self, count=1):
         return replace(self, active_player=self.active_player.draw(count))
-
-    def play_from_hand(self, card_number):
-        return self.active_player.play_from_hand(card_number)
 
     def attack(self, attacker_zone, target):
         return ToBattle(attacker_zone, target)

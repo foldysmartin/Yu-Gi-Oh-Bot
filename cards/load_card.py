@@ -11,8 +11,8 @@ with open("cards.json", "r") as file:
 
 
 def find_card(name) -> Card:
-
     card = first(data, lambda card: card["name"] == name)
+    index = data.index(card)
 
     return MonsterCard(
         instance_id=uuid4(),
@@ -20,7 +20,7 @@ def find_card(name) -> Card:
         attack=card["attack"],
         defence=card["defence"],
         level=card["level"],
-        activator=ToNormalSummon,
+        card_id=index + 1,
     )
 
 

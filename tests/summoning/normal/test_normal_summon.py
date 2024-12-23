@@ -2,6 +2,7 @@ from pytest import raises
 from abstract_field import AbstractField, AbstractFieldHalf, Zone
 from cards.load_card import find_card
 from game_state import GameState
+from summoning.normal.to_normal_summon import ToNormalSummon
 
 
 def test_to_nornmal_summon():
@@ -11,7 +12,7 @@ def test_to_nornmal_summon():
         AbstractFieldHalf(deck=[], hand=[monster]), AbstractFieldHalf(deck=[])
     )
 
-    summon_action = monster.activate()
+    summon_action = ToNormalSummon(index=0)
 
     effect = summon_action.activate(field, game_state)
     field, game_state = effect.apply(field, game_state)
@@ -28,12 +29,12 @@ def test_multiple_nornmal_summons():
         AbstractFieldHalf(deck=[]),
     )
 
-    summon_action = monster1.activate()
+    summon_action = ToNormalSummon(index=0)
 
     effect = summon_action.activate(field, GameState())
     field, _ = effect.apply(field, GameState())
 
-    effect = monster2.activate().activate(field, GameState())
+    effect = summon_action.activate(field, GameState())
     field, _ = effect.apply(field, GameState())
 
     assert field.active_player.monsterAt(Zone.First) == monster1
@@ -55,7 +56,7 @@ def test_can_only_have_5_monsters():
     )
 
     with raises(Exception):
-        summon_action = monster1.activate()
+        summon_action = ToNormalSummon(index=0)
         effect = summon_action.activate(field, game_state)
         field, game_state = effect.apply(field, game_state)
 
@@ -69,12 +70,12 @@ def test_can_only_summon_once_per_turn():
         AbstractFieldHalf(deck=[]),
     )
 
-    summon_action = monster1.activate()
+    summon_action = ToNormalSummon(index=0)
     effect = summon_action.activate(field, game_state)
     field, game_state = effect.apply(field, game_state)
 
     with raises(Exception):
-        summon_action = monster2.activate()
+        summon_action = ToNormalSummon(index=0)
         effect = summon_action.activate(field, game_state)
         field, game_state = effect.apply(field, game_state)
 
@@ -88,6 +89,6 @@ def test_can_only_summon_in_normal_phases():
     )
 
     with raises(Exception):
-        summon_action = monster.activate()
+        summon_action = ToNormalSummon(index=0)
         effect = summon_action.activate(field, game_state)
         field, game_state = effect.apply(field, game_state)

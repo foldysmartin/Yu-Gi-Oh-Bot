@@ -1,9 +1,11 @@
 from tkinter import Button, Label, Tk
 from Player import Player
 from abstract_field import Zone
-from battling.to_battle import AttackTarget
+from ai.bad_bot import BadBot
+from battling.to_battle import AttackTarget, ToBattle
 from cards.load_card import find_card
-from game import Game
+from game import Game, ToNextPhase
+from summoning.normal.to_normal_summon import ToNormalSummon
 
 
 def create_deck():
@@ -30,20 +32,6 @@ def create_deck():
     ]
 
 
-class BadBot:
-    def __init__(self, game):
-        self.game = game
-
-    def play(self):
-        try:
-            self.game.play_from_hand(1)
-        except:
-            pass
-        self.game.next_phase()
-        self.game.next_phase()
-        self.game.next_phase()
-
-
 class GameWindow(Tk):
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
@@ -56,6 +44,7 @@ class GameWindow(Tk):
         self._redraw()
 
     def _redraw(self):
+        self.actions = [action for (action, _) in self.game.avaliable_actions()]
         for card in self.cards:
             card.destroy()
         self.cards = []
@@ -90,11 +79,11 @@ class GameWindow(Tk):
             label = Label(self, text=card.name)
             label.grid(row=5, column=i)
 
-            card_number = i + 1
-            label.bind(
-                "<Button-1>",
-                self._card_in_hand_lambda(card_number),
-            )
+            if ToNormalSummon(card) in self.actions:
+                label.bind(
+                    "<Button-1>",
+                    self._action_lambda(ToNormalSummon(card)),
+                )
             self.cards.append(label)
 
     def _draw_opponent_hand(
@@ -112,6 +101,7 @@ class GameWindow(Tk):
             card_name = card.name if card else "Empty"
             label = Label(self, text=card_name)
             label.grid(row=4, column=i)
+
             label.bind("<Button-1>", self._select_lambda(Zone(i)))
             self.cards.append(label)
 
@@ -137,11 +127,11 @@ class GameWindow(Tk):
             column=1,
         )
 
-    def _card_in_hand_lambda(self, card_number):
-        return lambda e: self._card_in_hand(card_number)
+    def _action_lambda(self, action):
+        return lambda e: self._trigger_action(action)
 
-    def _card_in_hand(self, card_number):
-        self.game.play_from_hand(card_number)
+    def _trigger_action(self, action):
+        self.game.trigger_action(action)
         self._redraw()
 
     def _select_lambda(self, zone):
@@ -156,14 +146,13 @@ class GameWindow(Tk):
 
     def _attack(self, target):
         if self.selected:
-            self.game.battle(self.selected, target)
-            self._redraw()
+            self._trigger_action(ToBattle(self.selected, target))
 
     def _next_phase(self):
-        self.game.next_phase()
+        self._trigger_action(ToNextPhase())
 
         if self.game.game_state.active_player == Player.Two:
-            BadBot(self.game).play()
+            BadBot().play(self.game)
         self._redraw()
 
 

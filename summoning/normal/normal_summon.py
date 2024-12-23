@@ -10,7 +10,6 @@ class NormalSummon(Effect):
     card: MonsterCard
 
     def apply(self, field: AbstractField, game_state: GameState):
-
         field = field.summon_monster(self.card)
         game_state = replace(game_state, normal_summoned=True)
         return field, game_state

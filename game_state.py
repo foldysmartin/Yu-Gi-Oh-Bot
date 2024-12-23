@@ -63,7 +63,11 @@ class GameState:
         )
 
     def life_points(self, player):
-        return self._life_points[player.value]
+        life_points = self._life_points[player.value]
+        if life_points < 0:
+            return 0
+        else:
+            return life_points
 
     def lose_life_points(self, player, amount):
         life_points = self._life_points[:]

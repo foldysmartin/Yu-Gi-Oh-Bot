@@ -55,14 +55,16 @@ class ToBattle(Action):
         defender = field.inactive_player.monsterAt(zone)
 
         if attacker.attack > defender.attack:
-            return Destroy(defender) + LoseLifePoints(
+            return Destroy(defender, game_state.inactive_player) + LoseLifePoints(
                 attacker.attack - defender.attack, game_state.inactive_player
             )
 
         elif attacker.attack < defender.attack:
-            return Destroy(attacker) + LoseLifePoints(
+            return Destroy(attacker, game_state.active_player) + LoseLifePoints(
                 defender.attack - attacker.attack, game_state.active_player
             )
 
         else:
-            return Destroy(attacker) + Destroy(defender)
+            return Destroy(attacker, game_state.active_player) + Destroy(
+                defender, game_state.inactive_player
+            )

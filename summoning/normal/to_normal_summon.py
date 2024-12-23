@@ -12,7 +12,7 @@ class SummoningError(Exception):
 
 @dataclass(frozen=True)
 class ToNormalSummon(Action):
-    card: MonsterCard
+    index: int
 
     def activate(self, field: AbstractField, game_state: GameState):
 
@@ -24,5 +24,10 @@ class ToNormalSummon(Action):
 
         if not game_state.phase is Phase.Main1 and not game_state.phase is Phase.Main2:
             raise SummoningError("Can only normal summon in main phases")
+        
+        if self.index >= len(field.active_player.hand):
+            raise SummoningError("Invalid hand index")
+        
+        card = field.active_player.hand[self.index]
 
-        return NormalSummon(self.card)
+        return NormalSummon(card)

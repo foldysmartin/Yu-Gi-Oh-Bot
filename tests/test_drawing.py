@@ -1,6 +1,6 @@
 from pytest import raises
 from cards.load_card import find_card
-from field import BattleTarget, Field
+from Field import  Field
 from field_half import OutOfCards
 
 

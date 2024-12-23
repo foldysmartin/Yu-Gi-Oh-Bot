@@ -24,12 +24,8 @@ class FieldHalf(AbstractFieldHalf):
             self, hand=self.hand + self.deck[0:count], deck=self.deck[count:]
         )
 
-    def play_from_hand(self, card_number):
-        if len(self.hand) == 0:
-            raise HandEmptyError("No cards to play")
-
-        action = self.hand[card_number - 1].activate()
-        return action
-
     def deck_size(self):
         return len(self.deck)
+
+    def discard(self, card):
+        return replace(self, hand=[c for c in self.hand if c != card])
